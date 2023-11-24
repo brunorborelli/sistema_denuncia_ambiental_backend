@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "pessoa")
-public class Pessoa {
+@Table(name = "usuario")
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +41,9 @@ public class Pessoa {
 
     @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro = LocalDateTime.now();
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;
