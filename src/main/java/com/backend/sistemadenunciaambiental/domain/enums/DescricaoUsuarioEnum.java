@@ -15,5 +15,4 @@ public enum DescricaoUsuarioEnum {
     private Integer id;
     private String descricao;
 
-
 }
