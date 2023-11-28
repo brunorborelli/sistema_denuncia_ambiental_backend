@@ -76,7 +76,7 @@ public class Denuncia {
     private String foto3;
 
     @OneToOne
-    @JoinColumn(name = "usuario") //vinculo so é feito caso o denunciante não seja anonimo
+    @JoinColumn(name = "usuario_id") //vinculo so é feito caso o denunciante não seja anonimo
     private Usuario usuario;
 
 

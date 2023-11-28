@@ -1,5 +1,6 @@
 package com.backend.sistemadenunciaambiental.api.dto.outputDto;
 
+import com.backend.sistemadenunciaambiental.domain.enums.CategoriaFilhaDenunciaEnum;
 import com.backend.sistemadenunciaambiental.domain.enums.CategoriaPaiDenunciaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +34,7 @@ public class DenunciaOutputDto {
 
     private CategoriaPaiDenunciaEnum categoriaPai;
 
-    private CategoriaPaiDenunciaEnum categoriaFilha;
+    private CategoriaFilhaDenunciaEnum categoriaFilha;
 
     private LocalDate data;
 
@@ -45,6 +46,6 @@ public class DenunciaOutputDto {
 
     private String foto3; //base64 do front
 
-    private Integer usuario;//vinculo so é feito caso o denunciante não seja anonimo
+    private Long usuarioId;//vinculo so é feito caso o denunciante não seja anonimo
 
 }
