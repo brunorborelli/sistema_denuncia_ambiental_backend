@@ -2,7 +2,7 @@ package com.backend.sistemadenunciaambiental.api.controller;
 
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.UsuarioInputDTO;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.UsuarioOutputDTO;
-import com.backend.sistemadenunciaambiental.api.util.ValidationService;
+import com.backend.sistemadenunciaambiental.domain.modelo.Usuario;
 import com.backend.sistemadenunciaambiental.domain.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +41,12 @@ public class PessoaController {
     public ResponseEntity<Void> alterarUsuario(@PathVariable Long usuarioId, @RequestBody UsuarioInputDTO inputDTO) {
         usuarioService.alterarUsuario(usuarioId, inputDTO);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Usuario>> buscarUsuario(){
+        List<Usuario> usuarios = usuarioService.buscarUsuarios();
+        return ResponseEntity.ok(usuarios);
     }
 
 
