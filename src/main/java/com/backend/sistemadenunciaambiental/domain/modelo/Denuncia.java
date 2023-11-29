@@ -2,6 +2,7 @@ package com.backend.sistemadenunciaambiental.domain.modelo;
 
 import com.backend.sistemadenunciaambiental.domain.enums.CategoriaFilhaDenunciaEnum;
 import com.backend.sistemadenunciaambiental.domain.enums.CategoriaPaiDenunciaEnum;
+import com.backend.sistemadenunciaambiental.domain.enums.StatusEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -67,6 +67,9 @@ public class Denuncia {
     @Column(name = "provavel_autor")
     private String provavelAutor;
 
+    @Column(name = "status")
+    private StatusEnum status;
+
     @Column(name = "foto1", nullable = false) //base64 do front
     private String foto1;
 
@@ -79,5 +82,6 @@ public class Denuncia {
     @ManyToOne
     @JoinColumn(name = "usuario_id") //vinculo so é feito caso o denunciante não seja anonimo
     private Usuario usuario;
+
 
 }
