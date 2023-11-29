@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -75,9 +76,8 @@ public class Denuncia {
     @Column(name = "foto3") //base64 do front
     private String foto3;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "usuario_id") //vinculo so é feito caso o denunciante não seja anonimo
     private Usuario usuario;
-
 
 }

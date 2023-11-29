@@ -22,8 +22,13 @@ public class DenunciaService {
 
     public void cadastrarDenuncia(DenunciaInputDto inputDto){
         Denuncia denuncia = mapper.map( inputDto, Denuncia.class);
-        denuncia.setUsuario(usuarioService.buscarPorId(inputDto.getUsuarioId()));
-        denunciaRepository.save(denuncia);
+        if (inputDto.getUsuarioId() != null){
+            denuncia.setUsuario(usuarioService.buscarPorId(inputDto.getUsuarioId()));
+            denunciaRepository.save(denuncia);
+        }else {
+            denuncia.setUsuario(null);
+            denunciaRepository.save(denuncia);
+        }
     }
 
     public Denuncia getById(Long denunciaId){
