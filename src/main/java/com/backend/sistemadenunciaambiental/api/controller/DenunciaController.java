@@ -1,9 +1,8 @@
 package com.backend.sistemadenunciaambiental.api.controller;
 
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputDto;
-import com.backend.sistemadenunciaambiental.api.dto.inputDto.UsuarioInputDTO;
+import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputPutDto;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaOutputDto;
-import com.backend.sistemadenunciaambiental.api.dto.outputDto.UsuarioOutputDTO;
 import com.backend.sistemadenunciaambiental.domain.modelo.Denuncia;
 import com.backend.sistemadenunciaambiental.domain.service.DenunciaService;
 import lombok.RequiredArgsConstructor;
@@ -37,12 +36,12 @@ public class DenunciaController {
         denunciaService.cadastrarDenuncia(inputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-//
-//    @PutMapping("/alterar/{denunciaId}")
-//    public ResponseEntity<Void> alterarDenuncia(@PathVariable Long denunciaId, @RequestBody DenunciaInputDto inputDTO) {
-//        denunciaService.alterarDenuncia(denunciaId, inputDTO);
-//        return ResponseEntity.noContent().build();
-//    }
+
+    @PutMapping("/alterar/{denunciaId}")
+    public ResponseEntity<Void> alterarDenuncia(@PathVariable Long denunciaId, @RequestBody DenunciaInputPutDto inputPutDTO) {
+        denunciaService.alterarDenuncia(denunciaId, inputPutDTO);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping()
     public ResponseEntity<List<Denuncia>> buscarUsuarioPorId() {

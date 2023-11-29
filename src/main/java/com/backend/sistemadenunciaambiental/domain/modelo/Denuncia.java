@@ -83,5 +83,9 @@ public class Denuncia {
     @JoinColumn(name = "usuario_id") //vinculo so é feito caso o denunciante não seja anonimo
     private Usuario usuario;
 
+    @Column(name ="protocolo")
+    private String protocolo;  // id/ano (ex: 12/2023)
 
+    @Column(name ="data_alteracao")
+    private LocalDate dataAlteracao;
 }

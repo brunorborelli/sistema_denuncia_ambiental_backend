@@ -2,6 +2,7 @@ package com.backend.sistemadenunciaambiental.api.dto.outputDto;
 
 import com.backend.sistemadenunciaambiental.domain.enums.CategoriaFilhaDenunciaEnum;
 import com.backend.sistemadenunciaambiental.domain.enums.CategoriaPaiDenunciaEnum;
+import com.backend.sistemadenunciaambiental.domain.enums.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,8 @@ public class DenunciaOutputDto {
 
     private String provavelAutor;
 
+    private StatusEnum status;
+
     private String foto1; //base64 do front
 
     private String foto2; //base64 do front
@@ -47,5 +50,9 @@ public class DenunciaOutputDto {
     private String foto3; //base64 do front
 
     private Long usuarioId;//vinculo so é feito caso o denunciante não seja anonimo
+
+    private String protocolo;
+
+    private LocalDate dataAlteracao;
 
 }

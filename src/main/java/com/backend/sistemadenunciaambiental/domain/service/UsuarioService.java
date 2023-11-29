@@ -1,6 +1,6 @@
 package com.backend.sistemadenunciaambiental.domain.service;
 
-import com.backend.sistemadenunciaambiental.api.dto.inputDto.UsuarioInputDTO;
+import com.backend.sistemadenunciaambiental.api.dto.inputDto.UsuarioInputDto;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.UsuarioOutputDTO;
 import com.backend.sistemadenunciaambiental.api.util.CripitografiaUtil;
 import com.backend.sistemadenunciaambiental.api.util.ValidationService;
@@ -53,7 +53,7 @@ public class UsuarioService {
 
 
     //TODO VALIDAÇÃO CPF NÃO PODE SER REPEDITO NÃO PODE TER DOIS CPFS IGUAIS NO BANCO
-    public void cadastrarUsuario(UsuarioInputDTO inputDTO){
+    public void cadastrarUsuario(UsuarioInputDto inputDTO){
         Usuario usuario = new Usuario();
         usuario.setNome(inputDTO.getNome());
         validationService.isValidCPF(inputDTO.getCpf());
@@ -72,7 +72,7 @@ public class UsuarioService {
         }
     }
 
-    public void alterarUsuario(Long usuarioId, UsuarioInputDTO inputDTO){
+    public void alterarUsuario(Long usuarioId, UsuarioInputDto inputDTO){
         Usuario usuario = buscarPorId(usuarioId);
         usuario.setNome(inputDTO.getNome());
         validationService.isValidCPF(inputDTO.getCpf());

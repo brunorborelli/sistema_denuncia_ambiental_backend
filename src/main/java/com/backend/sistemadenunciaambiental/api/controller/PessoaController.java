@@ -1,6 +1,6 @@
 package com.backend.sistemadenunciaambiental.api.controller;
 
-import com.backend.sistemadenunciaambiental.api.dto.inputDto.UsuarioInputDTO;
+import com.backend.sistemadenunciaambiental.api.dto.inputDto.UsuarioInputDto;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.UsuarioOutputDTO;
 import com.backend.sistemadenunciaambiental.domain.modelo.Usuario;
 import com.backend.sistemadenunciaambiental.domain.service.UsuarioService;
@@ -32,13 +32,13 @@ public class PessoaController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Void> cadastrarUsuario(@RequestBody UsuarioInputDTO inputDTO) {
+    public ResponseEntity<Void> cadastrarUsuario(@RequestBody UsuarioInputDto inputDTO) {
         usuarioService.cadastrarUsuario(inputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/alterar/{usuarioId}")
-    public ResponseEntity<Void> alterarUsuario(@PathVariable Long usuarioId, @RequestBody UsuarioInputDTO inputDTO) {
+    public ResponseEntity<Void> alterarUsuario(@PathVariable Long usuarioId, @RequestBody UsuarioInputDto inputDTO) {
         usuarioService.alterarUsuario(usuarioId, inputDTO);
         return ResponseEntity.noContent().build();
     }

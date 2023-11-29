@@ -1,15 +1,16 @@
 package com.backend.sistemadenunciaambiental.domain.service;
 
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputDto;
+import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputPutDto;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaOutputDto;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
 import com.backend.sistemadenunciaambiental.domain.modelo.Denuncia;
-import com.backend.sistemadenunciaambiental.domain.modelo.Usuario;
 import com.backend.sistemadenunciaambiental.repository.DenunciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,6 +21,7 @@ public class DenunciaService {
     private final UsuarioService usuarioService;
     private final ModelMapper mapper;
 
+    //TODO criar metodo de validação de categoria pai e filha de denuncia e implementar em cadastrar e alterar
     public void cadastrarDenuncia(DenunciaInputDto inputDto){
         Denuncia denuncia = mapper.map( inputDto, Denuncia.class);
         if (inputDto.getUsuarioId() != null){
@@ -29,6 +31,8 @@ public class DenunciaService {
             denuncia.setUsuario(null);
             denunciaRepository.save(denuncia);
         }
+        denuncia.setProtocolo(denuncia.getId() + "/" + LocalDate.now().getYear());
+        denunciaRepository.save(denuncia);
     }
 
     public Denuncia getById(Long denunciaId){
@@ -51,30 +55,20 @@ public class DenunciaService {
         return outputDto;
     }
 
-    public DenunciaOutputDto alterarDenuncia(Long denunciaId, DenunciaInputDto inputDto){  //TODO NÃO FUNCIONA AINDA
+    public void alterarDenuncia(Long denunciaId, DenunciaInputPutDto inputPutDto){
         Denuncia denuncia = getById(denunciaId);
-        denuncia.setDenunciante(inputDto.getDenunciante());
-        denuncia.setRua(inputDto.getRua());
-        denuncia.setBairro(inputDto.getBairro());
-        denuncia.setMunicipio(inputDto.getMunicipio());
-        denuncia.setCep(inputDto.getCep());
-        denuncia.setPontoReferencia(inputDto.getPontoReferencia());
-        denuncia.setLatitude(inputDto.getLatitude());
-        denuncia.setLongitude(inputDto.getLongitude());
-        denuncia.setDescricao(inputDto.getDescricao());
-        denuncia.setCategoriaPai(inputDto.getCategoriaPai());
-        denuncia.setCategoriaFilha(inputDto.getCategoriaFilha());
-        denuncia.setData(inputDto.getData());
-        denuncia.setProvavelAutor(inputDto.getProvavelAutor());
-        denuncia.setFoto1(inputDto.getFoto1());
-        denuncia.setFoto2(inputDto.getFoto2());
-        denuncia.setFoto3(inputDto.getFoto3());
-        if(inputDto.getUsuarioId() != null ){
-            Usuario usuario = usuarioService.buscarPorId(inputDto.getUsuarioId());
-            denuncia.setUsuario(usuario);
+        if(inputPutDto.getCategoriaPai() != null){
+            denuncia.setCategoriaPai(inputPutDto.getCategoriaPai());
         }
-        denunciaRepository.save(denuncia);
-        return mapper.map(denuncia, DenunciaOutputDto.class);
+        if(inputPutDto.getCategoriaFilha() != null){
+            denuncia.setCategoriaFilha(inputPutDto.getCategoriaFilha());
+        }
+        if(inputPutDto.getStatus() != null){
+            denuncia.setStatus(inputPutDto.getStatus());
+        }
+            denuncia.setDataAlteracao(LocalDate.now());
+
+            denunciaRepository.save(denuncia);
     }
 
 }
