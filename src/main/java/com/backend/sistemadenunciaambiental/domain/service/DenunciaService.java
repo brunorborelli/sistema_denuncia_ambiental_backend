@@ -3,6 +3,7 @@ package com.backend.sistemadenunciaambiental.domain.service;
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputDto;
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputPutDto;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaOutputDto;
+import com.backend.sistemadenunciaambiental.api.util.ValidationService;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
 import com.backend.sistemadenunciaambiental.domain.modelo.Denuncia;
 import com.backend.sistemadenunciaambiental.repository.DenunciaRepository;
@@ -20,10 +21,15 @@ public class DenunciaService {
     private final DenunciaRepository denunciaRepository;
     private final UsuarioService usuarioService;
     private final ModelMapper mapper;
+    private final ValidationService validation;
 
-    //TODO criar metodo de validação de categoria pai e filha de denuncia e implementar em cadastrar e alterar
+
     public void cadastrarDenuncia(DenunciaInputDto inputDto){
         Denuncia denuncia = mapper.map( inputDto, Denuncia.class);
+
+        if(!validation.validarRelacionamentoCategoria(inputDto.getCategoriaPai(), inputDto.getCategoriaFilha())){
+            throw new NegocioException("Associação entre Categoria e SubCategoria invalidas!");
+        }
         if (inputDto.getUsuarioId() != null){
             denuncia.setUsuario(usuarioService.buscarPorId(inputDto.getUsuarioId()));
             denunciaRepository.save(denuncia);
@@ -57,6 +63,9 @@ public class DenunciaService {
 
     public void alterarDenuncia(Long denunciaId, DenunciaInputPutDto inputPutDto){
         Denuncia denuncia = getById(denunciaId);
+        if(!validation.validarRelacionamentoCategoria(inputPutDto.getCategoriaPai(), inputPutDto.getCategoriaFilha())){
+            throw new NegocioException("Associação entre Categoria e SubCategoria invalidas!");
+        }
         if(inputPutDto.getCategoriaPai() != null){
             denuncia.setCategoriaPai(inputPutDto.getCategoriaPai());
         }

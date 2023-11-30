@@ -24,6 +24,8 @@ public class AuthService {
         outputDto.setAutorizado(true);
         outputDto.setDescricao(usuario.getDescricao());
         return outputDto;
+
+        //TODO retornar junto os dados do usuario
     }
 
 }
