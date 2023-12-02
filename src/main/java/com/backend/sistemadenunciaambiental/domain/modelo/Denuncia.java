@@ -86,6 +86,12 @@ public class Denuncia {
     @Column(name ="protocolo")
     private String protocolo;  // id/ano (ex: 12/2023)
 
+    @Column(name ="data_cadastro")
+    private LocalDate dataCadastro;
+
     @Column(name ="data_alteracao")
     private LocalDate dataAlteracao;
+
+    @Column(name = "parecer_tecnico", length = 1000)
+    private String parecerTecnico;
 }

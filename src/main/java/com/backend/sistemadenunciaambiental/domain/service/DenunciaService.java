@@ -2,6 +2,8 @@ package com.backend.sistemadenunciaambiental.domain.service;
 
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputDto;
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputPutDto;
+import com.backend.sistemadenunciaambiental.api.dto.inputDto.FiltrosDenunciaDTO;
+import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaInputParecerDTO;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaOutputDto;
 import com.backend.sistemadenunciaambiental.api.util.ValidationService;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
@@ -38,6 +40,7 @@ public class DenunciaService {
             denunciaRepository.save(denuncia);
         }
         denuncia.setProtocolo(denuncia.getId() + "/" + LocalDate.now().getYear());
+        denuncia.setDataCadastro(LocalDate.now());
         denunciaRepository.save(denuncia);
     }
 
@@ -80,4 +83,35 @@ public class DenunciaService {
             denunciaRepository.save(denuncia);
     }
 
+
+    public void parecerDenuncia(Long denunciaId, DenunciaInputParecerDTO inputPutDto){
+        Denuncia denuncia = getById(denunciaId);
+        denuncia.setDataAlteracao(LocalDate.now());
+        denuncia.setParecerTecnico(inputPutDto.getParecerTecnico());
+        denuncia.setStatus(inputPutDto.getStatus());
+        denunciaRepository.save(denuncia);
+    }
+
+//    public List<DenunciaOutputDto> getDenunciaComFiltro(FiltrosDenunciaDTO filtrosDenunciaDTO){
+//        List<Denuncia> denunciaFiltrada = denunciaRepository.buscarDenunciaComFiltro(filtrosDenunciaDTO.getCategoriaPai(),
+//                                                                                     filtrosDenunciaDTO.getProtocolo(),
+//                                                                                     filtrosDenunciaDTO.getMunicipio(),
+//                                                                                     filtrosDenunciaDTO.getData(),
+//                                                                                     filtrosDenunciaDTO.getDataCadastro(),
+//                                                                                     filtrosDenunciaDTO.getStatus());
+//        List<DenunciaOutputDto> outputDtoList = List.of(mapper.map(denunciaFiltrada, DenunciaOutputDto.class));
+//        return  outputDtoList;
+//    }
+
+//    public List<DenunciaOutputDto> getDenunciaComFiltro(CategoriaPaiDenunciaEnum categoriaPai,
+//                                                        String protocolo,
+//                                                        String municipio,
+//                                                        LocalDate data,
+//                                                        LocalDate dataCadastro,
+//                                                        StatusEnum status){
+//        List<Denuncia> denunciaFiltrada = denunciaRepository.buscarDenunciaComFiltro(categoriaPai, protocolo, municipio,
+//                                                                                    data,dataCadastro,status);
+//        List<DenunciaOutputDto> outputDtoList = List.of(mapper.map(denunciaFiltrada, DenunciaOutputDto.class));
+//        return  outputDtoList;
+//    }
 }

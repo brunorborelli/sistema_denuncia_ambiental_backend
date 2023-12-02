@@ -55,4 +55,6 @@ public class DenunciaOutputDto {
 
     private LocalDate dataAlteracao;
 
+    private String parecerTecnico;
+
 }
