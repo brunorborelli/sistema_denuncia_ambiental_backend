@@ -2,7 +2,6 @@ package com.backend.sistemadenunciaambiental.domain.service;
 
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputDto;
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputPutDto;
-import com.backend.sistemadenunciaambiental.api.dto.inputDto.FiltrosDenunciaDTO;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaInputParecerDTO;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaOutputDto;
 import com.backend.sistemadenunciaambiental.api.util.ValidationService;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,12 @@ public class DenunciaService {
 
     public void cadastrarDenuncia(DenunciaInputDto inputDto){
         Denuncia denuncia = mapper.map( inputDto, Denuncia.class);
-
+        if(inputDto.getDescricao().length() > 500){
+            throw new NegocioException("A descrição não pode ser maior que 500 caracteres");
+        }
+        if(inputDto.getDescricao().length() < 50){
+            throw new NegocioException("A descrição não pode ser menor que 50 caracteres");
+        }
         if(!validation.validarRelacionamentoCategoria(inputDto.getCategoriaPai(), inputDto.getCategoriaFilha())){
             throw new NegocioException("Associação entre Categoria e SubCategoria invalidas!");
         }
@@ -92,16 +97,36 @@ public class DenunciaService {
         denunciaRepository.save(denuncia);
     }
 
-//    public List<DenunciaOutputDto> getDenunciaComFiltro(FiltrosDenunciaDTO filtrosDenunciaDTO){
-//        List<Denuncia> denunciaFiltrada = denunciaRepository.buscarDenunciaComFiltro(filtrosDenunciaDTO.getCategoriaPai(),
-//                                                                                     filtrosDenunciaDTO.getProtocolo(),
-//                                                                                     filtrosDenunciaDTO.getMunicipio(),
-//                                                                                     filtrosDenunciaDTO.getData(),
-//                                                                                     filtrosDenunciaDTO.getDataCadastro(),
-//                                                                                     filtrosDenunciaDTO.getStatus());
-//        List<DenunciaOutputDto> outputDtoList = List.of(mapper.map(denunciaFiltrada, DenunciaOutputDto.class));
-//        return  outputDtoList;
-//    }
+    public List<DenunciaOutputDto> getDenunciaComFiltro(Integer categoriaPai,
+                                                        String protocolo,
+                                                        String municipio,
+                                                        LocalDate data,
+                                                        LocalDate dataCadastro,
+                                                        Integer status){
+        //tratamento das Strings pois o Java passa elas como "" caso não sejam passadas e o banco espera receber NULL
+        if(protocolo == ""){protocolo = null;}
+        if(municipio == ""){municipio = null;}
+
+        List<Denuncia> denunciaFiltrada = denunciaRepository.buscarDenunciaComFiltro(categoriaPai, protocolo, municipio,
+                                                                                     status);
+        //filtro de data no codigo em vez do param
+        if (data != null) {
+            denunciaFiltrada = denunciaFiltrada.stream()
+                    .filter(denuncia -> denuncia.getData().equals(data))
+                    .collect(Collectors.toList());
+        }
+        if (dataCadastro != null) {
+            denunciaFiltrada = denunciaFiltrada.stream()
+                    .filter(denuncia -> denuncia.getDataCadastro().equals(data))
+                    .collect(Collectors.toList());
+        }
+        //mapeamento da entidade pro DTO
+        List<DenunciaOutputDto> outputDtoList = denunciaFiltrada
+                .stream()
+                .map(denuncia -> mapper.map(denuncia, DenunciaOutputDto.class))
+                .collect(Collectors.toList());
+        return  outputDtoList;
+    }
 
 //    public List<DenunciaOutputDto> getDenunciaComFiltro(CategoriaPaiDenunciaEnum categoriaPai,
 //                                                        String protocolo,
