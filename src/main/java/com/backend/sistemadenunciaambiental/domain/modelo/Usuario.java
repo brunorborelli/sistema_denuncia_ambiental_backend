@@ -49,6 +49,10 @@ public class Usuario {
     @Column(name = "password")
     private String password;
 
+    @JsonIgnore
+    @Column(columnDefinition = "TEXT")
+    private String token;
+
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;
 
