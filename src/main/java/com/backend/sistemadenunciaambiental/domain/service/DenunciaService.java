@@ -6,6 +6,7 @@ import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaInputParec
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaOutputDto;
 import com.backend.sistemadenunciaambiental.api.util.ValidationService;
 import com.backend.sistemadenunciaambiental.domain.enums.DescricaoUsuarioEnum;
+import com.backend.sistemadenunciaambiental.domain.enums.StatusEnum;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
 import com.backend.sistemadenunciaambiental.domain.modelo.Denuncia;
 import com.backend.sistemadenunciaambiental.domain.modelo.Usuario;
@@ -47,6 +48,7 @@ public class DenunciaService {
             denuncia.setDenunciante("Anônimo");
             denunciaRepository.save(denuncia);
         }
+        denuncia.setStatus(StatusEnum.CRIADA);
         denuncia.setProtocolo(denuncia.getId() + "/" + LocalDate.now().getYear());
         denuncia.setDataCadastro(LocalDate.now());
         denunciaRepository.save(denuncia);
