@@ -44,6 +44,7 @@ public class DenunciaService {
             denunciaRepository.save(denuncia);
         }else {
             denuncia.setUsuario(null);
+            denuncia.setDenunciante("Anônimo");
             denunciaRepository.save(denuncia);
         }
         denuncia.setProtocolo(denuncia.getId() + "/" + LocalDate.now().getYear());
