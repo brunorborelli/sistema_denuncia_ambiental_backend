@@ -70,13 +70,13 @@ public class Denuncia {
     @Column(name = "status")
     private StatusEnum status;
 
-    @Column(name = "foto1", nullable = false, length = 5000) //base64 do front
+    @Column(name = "foto1", nullable = false, length = 5000000) //base64 do front
     private String foto1;
 
-    @Column(name = "foto2", length = 5000) //base64 do front
+    @Column(name = "foto2", length = 5000000) //base64 do front
     private String foto2;
 
-    @Column(name = "foto3", length = 5000) //base64 do front
+    @Column(name = "foto3", length = 5000000) //base64 do front
     private String foto3;
 
     @ManyToOne
