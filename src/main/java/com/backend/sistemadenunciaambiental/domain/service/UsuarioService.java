@@ -65,13 +65,13 @@ public class UsuarioService {
                 .orElseThrow(() -> new ObjectNotFoundException("Usuario não encontrado para o token " + token));
     }
 
-    // TODO VALIDAÇÃO EMAIL NÃO PODE EXISTIR DOIS EMAILS
+    // TODO VALIDAÇÃO EMAIL NÃO PODE EXISTIR DOIS EMAILS - PRIORIDADE BAIXA
     public void cadastrarUsuario(UsuarioInputDto inputDTO) {
         Usuario usuario = new Usuario();
         usuario.setNome(inputDTO.getNome());
         validationService.isValidCPF(inputDTO.getCpf());
         String cpf = formaterService.formatarCPF(inputDTO.getCpf());
-        cpfJaCadastrado(cpf); //TODO ALTERAR VALIDACAO PARA BOOLEAN
+        cpfJaCadastrado(cpf); //TODO ALTERAR VALIDACAO PARA BOOLEAN - PRIORIDADE BAIXA
         usuario.setCpf(cpf);
         validationService.isValidEmail(inputDTO.getEmail());
         usuario.setEmail(inputDTO.getEmail());

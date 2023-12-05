@@ -68,7 +68,8 @@ public class DenunciaController {
             @RequestParam(required = false) String municipio,
             @RequestParam(required = false) LocalDate data,
             @RequestParam(required = false) LocalDate dataCadastro,
-            @RequestParam(required = false) Integer status) {
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) String token) {
 
         List<DenunciaOutputDto> outputDtoList = denunciaService.getDenunciaComFiltro(
                 categoriaPai,
@@ -76,7 +77,8 @@ public class DenunciaController {
                 municipio,
                 data,
                 dataCadastro,
-                status);
+                status,
+                token);
         if(outputDtoList.isEmpty()){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

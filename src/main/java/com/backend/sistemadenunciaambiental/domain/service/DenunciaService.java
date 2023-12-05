@@ -5,8 +5,10 @@ import com.backend.sistemadenunciaambiental.api.dto.inputDto.DenunciaInputPutDto
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaInputParecerDTO;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.DenunciaOutputDto;
 import com.backend.sistemadenunciaambiental.api.util.ValidationService;
+import com.backend.sistemadenunciaambiental.domain.enums.DescricaoUsuarioEnum;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
 import com.backend.sistemadenunciaambiental.domain.modelo.Denuncia;
+import com.backend.sistemadenunciaambiental.domain.modelo.Usuario;
 import com.backend.sistemadenunciaambiental.repository.DenunciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,7 +27,7 @@ public class DenunciaService {
     private final ModelMapper mapper;
     private final ValidationService validation;
 
-    //TODO retornar o numero de protocolo
+    //TODO retornar o numero de protocolo - PRIORIDADE MEDIA
     public void cadastrarDenuncia(DenunciaInputDto inputDto){
         Denuncia denuncia = mapper.map( inputDto, Denuncia.class);
         if(inputDto.getDescricao().length() > 500){
@@ -80,9 +82,6 @@ public class DenunciaService {
         if(inputPutDto.getCategoriaFilha() != null){
             denuncia.setCategoriaFilha(inputPutDto.getCategoriaFilha());
         }
-        if(inputPutDto.getStatus() != null){
-            denuncia.setStatus(inputPutDto.getStatus());
-        }
             denuncia.setDataAlteracao(LocalDate.now());
 
             denunciaRepository.save(denuncia);
@@ -97,20 +96,39 @@ public class DenunciaService {
         denunciaRepository.save(denuncia);
     }
 
-    //TODO CRIAR UM NOVO GET DENUNCIA COM FILTRO PARA O USUARIO PORQUE O USUARIO SO PODE PESQUISAR DENUNCIAS QUE ESTÃO VINCULADAS AO SEU CPF
-    // OU FAZER VALIDAÇÕES QUE VERIFIQUEM SE O USUARIO É UM DENUNCIANTE OU UM ANALISTA E A PARTIR DAI LIBERAR PARA O USUARIO SO AS DENUNCIAS FEITAS PELO MESMO
     public List<DenunciaOutputDto> getDenunciaComFiltro(Integer categoriaPai,
                                                         String protocolo,
                                                         String municipio,
                                                         LocalDate data,
                                                         LocalDate dataCadastro,
-                                                        Integer status){
+                                                        Integer status,
+                                                        String token){
+        if (!token.isEmpty()) {
+            Usuario usuario = usuarioService.buscarUsuarioPorToken(token);
+
+            if (usuario.getDescricao() != DescricaoUsuarioEnum.ANALISTA){
+
+            }
+        }
+
+
+
         //tratamento das Strings pois o Java passa elas como "" caso não sejam passadas e o banco espera receber NULL
         if(protocolo == ""){protocolo = null;}
         if(municipio == ""){municipio = null;}
 
         List<Denuncia> denunciaFiltrada = denunciaRepository.buscarDenunciaComFiltro(categoriaPai, protocolo, municipio,
                                                                                      status);
+
+        //Se o usuario for um denunciante, filtra os resultados para trazer somente dados do usuario-denunciante em questão
+        if (!token.isEmpty()) {
+            Usuario usuario = usuarioService.buscarUsuarioPorToken(token);
+            if (usuario.getDescricao() != DescricaoUsuarioEnum.ANALISTA){
+                denunciaFiltrada = denunciaFiltrada.stream()
+                        .filter(denuncia -> denuncia.getUsuario().getId().equals(usuario.getId()))
+                        .collect(Collectors.toList());
+            }
+        }
         //filtro de data no codigo em vez do param
         if (data != null) {
             denunciaFiltrada = denunciaFiltrada.stream()
