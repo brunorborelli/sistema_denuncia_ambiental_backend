@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,6 +15,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     @Query(value = "SELECT * FROM usuario u WHERE u.cpf = :cpf", nativeQuery = true)
     Optional<Usuario> buscarUsuarioPorCpf(@Param("cpf") String cpf);
+
+    @Query(value = "SELECT * FROM usuario u WHERE u.cpf = :cpf", nativeQuery = true)
+    List<Usuario> buscarUsuarioPorCpfList(@Param("cpf") String cpf);
 
     @Query(value = "SELECT * FROM usuario u WHERE u.token = :token", nativeQuery = true)
     Optional<Usuario> buscarUsuarioPorToken(@Param("token") String token);

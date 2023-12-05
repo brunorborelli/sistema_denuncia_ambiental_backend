@@ -25,7 +25,7 @@ public class DenunciaService {
     private final ModelMapper mapper;
     private final ValidationService validation;
 
-
+    //TODO retornar o numero de protocolo
     public void cadastrarDenuncia(DenunciaInputDto inputDto){
         Denuncia denuncia = mapper.map( inputDto, Denuncia.class);
         if(inputDto.getDescricao().length() > 500){
@@ -97,6 +97,8 @@ public class DenunciaService {
         denunciaRepository.save(denuncia);
     }
 
+    //TODO CRIAR UM NOVO GET DENUNCIA COM FILTRO PARA O USUARIO PORQUE O USUARIO SO PODE PESQUISAR DENUNCIAS QUE ESTÃO VINCULADAS AO SEU CPF
+    // OU FAZER VALIDAÇÕES QUE VERIFIQUEM SE O USUARIO É UM DENUNCIANTE OU UM ANALISTA E A PARTIR DAI LIBERAR PARA O USUARIO SO AS DENUNCIAS FEITAS PELO MESMO
     public List<DenunciaOutputDto> getDenunciaComFiltro(Integer categoriaPai,
                                                         String protocolo,
                                                         String municipio,
@@ -128,15 +130,5 @@ public class DenunciaService {
         return  outputDtoList;
     }
 
-//    public List<DenunciaOutputDto> getDenunciaComFiltro(CategoriaPaiDenunciaEnum categoriaPai,
-//                                                        String protocolo,
-//                                                        String municipio,
-//                                                        LocalDate data,
-//                                                        LocalDate dataCadastro,
-//                                                        StatusEnum status){
-//        List<Denuncia> denunciaFiltrada = denunciaRepository.buscarDenunciaComFiltro(categoriaPai, protocolo, municipio,
-//                                                                                    data,dataCadastro,status);
-//        List<DenunciaOutputDto> outputDtoList = List.of(mapper.map(denunciaFiltrada, DenunciaOutputDto.class));
-//        return  outputDtoList;
-//    }
+
 }

@@ -17,4 +17,5 @@ public class DenunciaInputPutDto {
     private CategoriaFilhaDenunciaEnum categoriaFilha;
 
     private StatusEnum status;
+    //TODO remover status do put de denuncia no requisito r008 so pede categoria e subcategoria
 }

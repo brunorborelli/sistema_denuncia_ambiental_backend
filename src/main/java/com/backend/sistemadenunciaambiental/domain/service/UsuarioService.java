@@ -3,6 +3,7 @@ package com.backend.sistemadenunciaambiental.domain.service;
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.UsuarioInputDto;
 import com.backend.sistemadenunciaambiental.api.dto.outputDto.UsuarioOutputDTO;
 import com.backend.sistemadenunciaambiental.api.util.CripitografiaUtil;
+import com.backend.sistemadenunciaambiental.api.util.FormaterService;
 import com.backend.sistemadenunciaambiental.api.util.ValidationService;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
 import com.backend.sistemadenunciaambiental.domain.exception.ObjectNotFoundException;
@@ -22,6 +23,8 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     private final ValidationService validationService;
+
+    private final FormaterService formaterService;
 
     public Usuario buscarPorId(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -52,18 +55,24 @@ public class UsuarioService {
                 .orElseThrow(() -> new ObjectNotFoundException("Usuario não encontrado para o CPF " + cpf));
     }
 
+    public List<Usuario> buscarUsuarioPorCpfLista(String cpf){
+        List<Usuario> usuarioList = usuarioRepository.buscarUsuarioPorCpfList(cpf);
+        return usuarioList;
+    }
+
     public Usuario buscarUsuarioPorToken(String token) {
         return usuarioRepository.buscarUsuarioPorToken(token)
                 .orElseThrow(() -> new ObjectNotFoundException("Usuario não encontrado para o token " + token));
     }
 
-    // TODO VALIDAÇÃO CPF NÃO PODE SER REPEDITO NÃO PODE TER DOIS CPFS IGUAIS NO
-    // BANCO
+    // TODO VALIDAÇÃO EMAIL NÃO PODE EXISTIR DOIS EMAILS
     public void cadastrarUsuario(UsuarioInputDto inputDTO) {
         Usuario usuario = new Usuario();
         usuario.setNome(inputDTO.getNome());
         validationService.isValidCPF(inputDTO.getCpf());
-        usuario.setCpf(inputDTO.getCpf());
+        String cpf = formaterService.formatarCPF(inputDTO.getCpf());
+        cpfJaCadastrado(cpf); //TODO ALTERAR VALIDACAO PARA BOOLEAN
+        usuario.setCpf(cpf);
         validationService.isValidEmail(inputDTO.getEmail());
         usuario.setEmail(inputDTO.getEmail());
         usuario.setDescricao(inputDTO.getDescricao());
@@ -94,6 +103,13 @@ public class UsuarioService {
             usuarioRepository.save(usuario);
         } else {
             throw new NegocioException("Confirmar senha diferente de Senha");
+        }
+    }
+
+    private void cpfJaCadastrado(String cpf){
+        List<Usuario> usuarioList = buscarUsuarioPorCpfLista(cpf);
+        if(!usuarioList.isEmpty()){
+            throw new NegocioException("CPF ja cadastrado!");
         }
     }
 

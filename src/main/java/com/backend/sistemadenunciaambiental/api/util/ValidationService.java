@@ -3,13 +3,17 @@ package com.backend.sistemadenunciaambiental.api.util;
 import com.backend.sistemadenunciaambiental.domain.enums.CategoriaFilhaDenunciaEnum;
 import com.backend.sistemadenunciaambiental.domain.enums.CategoriaPaiDenunciaEnum;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@RequiredArgsConstructor
 public class ValidationService {
+
+
     public boolean isValidEmail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
 

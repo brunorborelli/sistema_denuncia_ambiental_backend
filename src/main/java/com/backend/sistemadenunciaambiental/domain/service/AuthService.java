@@ -28,7 +28,6 @@ public class AuthService {
         usuarioService.updateToken(token, usuario);
 
         return token;
-        // TODO retornar junto os dados do usuario
     }
 
     public Usuario getUsuarioLogado(String token) {
