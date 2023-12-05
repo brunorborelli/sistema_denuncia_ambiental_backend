@@ -1,6 +1,7 @@
 package com.backend.sistemadenunciaambiental.api.controller;
 
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.LoginInputDto;
+import com.backend.sistemadenunciaambiental.api.dto.outputDto.UsuarioOutputDTO;
 import com.backend.sistemadenunciaambiental.domain.modelo.Usuario;
 import com.backend.sistemadenunciaambiental.domain.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class AuthController {
     }
 
     @PostMapping("/getUsuarioLogado")
-    public ResponseEntity<Usuario> getUsuarioLogado(@RequestHeader(name = "Authorization") String token) {
-        Usuario usuario = authService.getUsuarioLogado(token);
+    public ResponseEntity<UsuarioOutputDTO> getUsuarioLogado(@RequestHeader(name = "Authorization") String token) {
+        UsuarioOutputDTO usuario = authService.getUsuarioLogado(token);
         return ResponseEntity.ok().body(usuario);
     }
 }

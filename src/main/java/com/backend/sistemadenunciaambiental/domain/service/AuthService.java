@@ -1,6 +1,7 @@
 package com.backend.sistemadenunciaambiental.domain.service;
 
 import com.backend.sistemadenunciaambiental.api.dto.inputDto.LoginInputDto;
+import com.backend.sistemadenunciaambiental.api.dto.outputDto.UsuarioOutputDTO;
 import com.backend.sistemadenunciaambiental.api.util.CripitografiaUtil;
 import com.backend.sistemadenunciaambiental.domain.exception.NegocioException;
 import com.backend.sistemadenunciaambiental.domain.modelo.Usuario;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UsuarioService usuarioService;
+
+    private final ModelMapper mapper;
 
     public String login(LoginInputDto loginInputDto) {
         Usuario usuario = usuarioService.buscarUsuarioPorCpf(loginInputDto.getCpf());
@@ -30,7 +34,7 @@ public class AuthService {
         return token;
     }
 
-    public Usuario getUsuarioLogado(String token) {
+    public UsuarioOutputDTO getUsuarioLogado(String token) {
 
         if (token == null || token.isEmpty()) {
             throw new NegocioException("Token vazio");
@@ -42,7 +46,7 @@ public class AuthService {
             throw new NegocioException("Token invalido");
         }
 
-        return usuario;
+        return mapper.map(usuario, UsuarioOutputDTO.class);
     }
 
 }
