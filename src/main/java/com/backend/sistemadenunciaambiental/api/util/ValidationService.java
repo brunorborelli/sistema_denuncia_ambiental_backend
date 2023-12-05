@@ -137,6 +137,7 @@ public class ValidationService {
         switch (enumFilho) {
             case ADMINISTRACAO_AMBIENTAL_1:
             case ADMINISTRACAO_AMBIENTAL_2:
+            case OUTROS:
                 return true;
             default:
                 return false;
